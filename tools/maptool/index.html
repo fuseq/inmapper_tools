@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>OpenStreetMap - Görsel Sürükle & Yeniden Boyutlandır</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 50px;
+      z-index: 1000;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .back-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #3498db;
+      font-weight: 500;
+    }
+    .back-link:hover {
+      color: #2980b9;
+    }
+    .back-link svg {
+      fill: currentColor;
+      margin-right: 5px;
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="back-button">
+    <a href="../../dashboard.html" class="back-link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+      Dashboard
+    </a>
+  </div>
+  <form id="ar-search-form" role="search" onsubmit="handleSearch(event)">
+    <label for="ar-search-box">Search</label>
+    <input id="ar-search-box" type="search" placeholder="Search..." required />
+    <button id="ar-search-btn" type="submit"><i class="fas fa-search"></i></button>
+  </form>
+
+  <div id="controls">
+    <label for="file-upload" class="custom-file-upload">
+      <i class="fas fa-file-upload"></i> Select File
+    </label>
+    <input id="file-upload" type="file" /><button id="toggleModeBtn" disabled><i class="fas fa-map"></i> Mod: Map</button>
+    <button id="addMarkersBtn" disabled><i class="fas fa-crosshairs"></i> Get Coordinates</button>
+    <button id="getCoordinateModeBtn"><i class="fas fa-map-marker-alt"></i> Point lat/lon</button><div class="save-load-controls">
+      <button id="saveSettingsBtn" disabled><i class="fas fa-save"></i> Save Layout</button>
+      <button id="loadSettingsBtn"><i class="fas fa-folder-open"></i> Load Layout</button>
+    </div>
+    
+    <div class="undo-control">
+      <button id="undoBtn" disabled><i class="fas fa-undo"></i> Undo</button>
+    </div>
+
+    <div class="opacity-control">
+      <label for="opacityRange"><i class="fas fa-adjust"></i> Opacity</label>
+      <input type="range" id="opacityRange" min="0" max="1" step="0.01" value="1">
+    </div>
+
+    <div class="rotation-control">
+      <label for="rotationRange"><i class="fas fa-sync-alt"></i> Rotation</label>
+      <div class="rotation-inputs">
+        <input type="range" id="rotationRange" min="0" max="359" step="1" value="0" disabled>
+        <input type="number" id="rotationDegree" min="0" max="359" value="0" disabled>
+      </div>
+    </div>
+
+    <div id="image-info">
+      <span id="active-image-label">No active image</span>
+    </div>
+  </div><div id="coordinatesDiv"></div>
+  <div id="map"></div>
+  
+  <!-- Layouts Modal -->
+  <div id="layoutsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close-modal">&times;</span>
+        <h2>Saved Layouts</h2>
+      </div>
+      <div class="modal-body">
+        <div id="savedLayoutsList">
+          <!-- Saved layouts will be listed here -->
+        </div>
+        <div class="no-layouts-message">No saved layouts found</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

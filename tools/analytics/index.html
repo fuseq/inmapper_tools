@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+  <!-- CoreUI CSS -->
+  <link href="https://unpkg.com/@coreui/coreui@4.0.0/dist/css/coreui.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@1.4.2/dist/flowbite.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icon-css/css/flag-icon.min.css">
+  <script src="https://unpkg.com/date-holidays@2.3.1/lib/index.umd.js"></script>
+
+</head>
+
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <img src="assets/logo-header.png" alt="Logo" class="logo">
+      </div>
+      <div class="form-container">
+        <form id="date-form"
+          style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 20px;">
+          <input type="date" id="startDate" name="startDate" />
+          <input type="date" id="endDate" name="endDate" />
+          <button type="button" id="btn-1g">1 Gün</button>
+          <button type="button" id="btn-1h">1 Hafta</button>
+          <button type="button" id="btn-1a">1 Ay</button>
+          <button type="button" id="btn-1y">1 Yıl</button>
+          <button type="submit" style="background-color: #2ecc71;">Verileri Getir</button>
+        </form>
+      </div>
+      <div class="dropdown-container" style="position: relative; margin-left: auto;">
+        <button class="dropdown-btn">Site Seç</button>
+        <div class="dropdown-content" id="site-dropdown" style="display: none;">
+          <!-- Site items will be added here dynamically -->
+        </div>
+      </div>
+      <div style="margin-left: 20px;">
+        <!-- PDF butonu -->
+        <button onclick="goToPage('pdf_layout.html')" class="btn btn-secondary">PDF</button>
+      </div>
+    </nav>
+  </header>
+
+  <div id="dashboard">
+    <!-- CoreUI Cards for displaying statistics -->
+    <div class="row" id="print-stats-row">
+      <div class="col-md-3" id="total-visits"></div>
+      <div class="col-md-3" id="bounce-rate"></div>
+      <div class="col-md-3" id="most-visited-device"></div>
+      <div class="col-md-3" id="avg-time"></div>
+    </div>
+    <div class="card">
+      <h2 class="header-title">Kullanım İstatistiği</h2>
+      <div class="charts-row">
+        <div id="daily-events"></div>
+        <div id="hourly-events"></div>
+      </div>
+      <div class="pie-charts-row">
+        <div id="operating-systems"></div>
+        <div id="language-distribution"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="header-title">Rota İstatistiği</h2>
+      <div class="charts-row">
+        <div id="from-to-events"></div>
+        <div id="start-to-end-events"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="header-title">Arama İstatistiği</h2>
+      <div class="charts-row">
+        <div id="top-searchs"></div>
+        <div id="searched-events"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2 class="header-title">Kategorik İstatistikler</h2>
+      <div class="charts-row">
+        <div id="donut-container"></div>
+        <div id="area-chart-container"></div>
+      </div>
+      <div class="charts-row" style="padding: 16px; gap: 16px;">
+        <div id="top-units-table-container"></div>
+        <div id="services-container"></div>
+      </div>
+
+      <div class="charts-row" style="padding: 16px; gap: 16px;">
+        <div id="floors-container"></div>
+        <div id="kiosks-container"></div>
+      </div>
+
+      <div class="charts-row" style="padding: 16px; gap: 16px;">
+        <div id="matched-searches-container"></div>
+        <div id="unmatched-searches-container"></div>
+      </div>
+
+
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+  <script>
+    // Go to the specific page based on the current page state (index or pdf layout)
+    function goToPage(targetPage) {
+      const startDate = document.getElementById("startDate")?.value;
+      const endDate = document.getElementById("endDate")?.value;
+
+      let url = targetPage;
+
+      if (startDate && endDate) {
+        url += `?startDate=${startDate}&endDate=${endDate}`;
+      }
+
+      window.location.href = url;
+    }
+  </script>
+  <script type="module" src="./scripts/script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2c3e50;
+}
+
+h2 {
+    margin: 20px 0;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+h3 {
+    margin: 15px 0;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.input-section {
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #444;
+}
+
+textarea, input[type="file"], input[type="number"], select, input[type="color"], input[type="range"] {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: inherit;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.primary-btn {
+    background-color: #3498db;
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #2980b9;
+}
+
+.secondary-btn {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: #7f8c8d;
+}
+
+.secondary-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.results-section {
+    display: none;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.qr-codes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.qr-code-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    background-color: white;
+}
+
+/* Style for the canvas/SVG that contains the QR code */
+.qr-code-item canvas,
+.qr-code-item svg {
+    max-width: 100%;
+    height: auto !important;
+    image-rendering: -webkit-optimize-contrast; /* Improve rendering in Chrome */
+    image-rendering: crisp-edges; /* Improve rendering in Firefox */
+}
+
+.qr-code-url {
+    margin: 10px 0;
+    font-size: 14px;
+    word-break: break-all;
+    text-align: center;
+    color: #555;
+}
+
+.qr-code-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.download-btn {
+    background-color: #2ecc71;
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+}
+
+.download-btn:hover {
+    background-color: #27ae60;
+}
+
+@media (max-width: 768px) {
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .qr-codes-container {
+        grid-template-columns: 1fr;
+    }
+}

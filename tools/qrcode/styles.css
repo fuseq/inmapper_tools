@@ -1,0 +1,327 @@
+:root {
+    --primary-color: #ff7f50; /* inMapper turuncu */
+    --secondary-color: #7a7a7a; /* inMapper gri */
+    --dark-color: #1a1a1a;
+    --light-color: #f8f9fa;
+    --border-radius: 10px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: var(--light-color);
+    padding: 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid var(--primary-color);
+}
+
+header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.title-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    justify-content: center;
+    margin-right: 120px;
+}
+
+
+
+
+
+
+
+.back-button {
+    margin-right: 20px;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #e06a3b; /* Daha koyu turuncu */
+}
+
+.back-link svg {
+    fill: currentColor;
+    margin-right: 5px;
+}
+
+h1 {
+    color: var(--dark-color);
+    position: relative;
+    display: inline-block;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
+}
+
+h2 {
+    margin: 20px 0;
+    color: var(--dark-color);
+    font-weight: 500;
+    position: relative;
+    display: inline-block;
+}
+
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, var(--primary-color), transparent);
+    border-radius: 2px;
+}
+
+h3 {
+    margin: 15px 0;
+    color: var(--dark-color);
+    font-weight: 500;
+    display: inline-block;
+    position: relative;
+}
+
+h3::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: rgba(255, 127, 80, 0.3);
+    border-radius: 2px;
+}
+
+.input-section {
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: var(--secondary-color);
+}
+
+textarea, input[type="file"], input[type="number"], select, input[type="range"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: inherit;
+    transition: all 0.3s ease;
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+textarea:focus, input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(255, 127, 80, 0.2);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.button-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 5px rgba(255, 127, 80, 0.3);
+}
+
+.primary-btn:hover {
+    background-color: #e06a3b; /* Daha koyu turuncu */
+    box-shadow: 0 4px 8px rgba(255, 127, 80, 0.4);
+}
+
+.secondary-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    box-shadow: 0 2px 5px rgba(122, 122, 122, 0.3);
+}
+
+.secondary-btn:hover {
+    background-color: #666666; /* Daha koyu gri */
+    box-shadow: 0 4px 8px rgba(122, 122, 122, 0.4);
+}
+
+.secondary-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.results-section {
+    display: none;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(122, 122, 122, 0.2);
+}
+
+.qr-codes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.qr-code-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid rgba(255, 127, 80, 0.2);
+    border-radius: var(--border-radius);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+.qr-code-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 127, 80, 0.4);
+}
+
+/* Style for the canvas/SVG that contains the QR code */
+.qr-code-item canvas,
+.qr-code-item svg {
+    max-width: 100%;
+    height: auto !important;
+    image-rendering: -webkit-optimize-contrast; /* Improve rendering in Chrome */
+    image-rendering: crisp-edges; /* Improve rendering in Firefox */
+}
+
+.qr-code-url {
+    margin: 10px 0;
+    font-size: 14px;
+    word-break: break-all;
+    text-align: center;
+    color: #555;
+}
+
+.qr-code-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.download-btn {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(255, 127, 80, 0.3);
+}
+
+.download-btn:hover {
+    background-color: #e06a3b; /* Daha koyu turuncu */
+    box-shadow: 0 4px 8px rgba(255, 127, 80, 0.4);
+    transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(122, 122, 122, 0.2);
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .options-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+    
+    .qr-codes-container {
+        grid-template-columns: 1fr;
+    }
+}

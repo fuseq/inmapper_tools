@@ -1,0 +1,213 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary-color: #ff7f50; /* inMapper turuncu */
+    --secondary-color: #7a7a7a; /* inMapper gri */
+    --dark-color: #1a1a1a;
+    --light-color: #f8f9fa;
+    --border-radius: 10px;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: var(--light-color);
+    padding: 20px;
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-direction: column;
+    text-align: center;
+}
+
+.logo-container {
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    display: block;
+}
+
+.header-text h1 {
+    color: var(--dark-color);
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.header-text h1::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    border-radius: 3px;
+}
+
+.header-text p {
+    color: var(--secondary-color);
+    font-size: 1.2rem;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+.tool-card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-top: 4px solid var(--primary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,127,80,0.05) 0%, rgba(255,255,255,0) 50%);
+    pointer-events: none;
+}
+
+.tool-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.tool-icon {
+    margin-bottom: 20px;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 127, 80, 0.1);
+    border-radius: 50%;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover .tool-icon {
+    transform: scale(1.05);
+    background-color: rgba(255, 127, 80, 0.2);
+}
+
+.tool-icon svg {
+    fill: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover .tool-icon svg {
+    fill: var(--primary-color);
+}
+
+.tool-card h3 {
+    color: var(--dark-color);
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+    transition: all 0.3s ease;
+}
+
+.tool-card:hover h3 {
+    color: var(--primary-color);
+}
+
+.tool-card p {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.btn {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(255, 127, 80, 0.3);
+}
+
+.btn:hover {
+    background-color: #e06a3b; /* Daha koyu turuncu */
+    box-shadow: 0 4px 8px rgba(255, 127, 80, 0.4);
+    transform: translateY(-2px);
+}
+
+
+.btn:hover {
+    background-color: darken(var(--primary-color), 10%);
+    box-shadow: 0 4px 8px rgba(255, 127, 80, 0.4);
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .tools-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-text h1 {
+        font-size: 2rem;
+    }
+    
+    .logo {
+        width: 100px;
+    }
+}
+
+/* Footer styles */
+.footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(122, 122, 122, 0.2);
+    color: var(--secondary-color);
+}
+
+.footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}

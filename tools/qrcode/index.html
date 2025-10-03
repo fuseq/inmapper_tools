@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>inMapper - QR Code Generator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="../../images/logo.png" type="image/png">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="back-button">
+                <a href="../../dashboard.html" class="back-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                    Dashboard'a Dön
+                </a>
+            </div>
+            <div class="title-container">
+                <h1>inMapper QR Code Generator</h1>
+            </div>
+        </header>
+        
+        <div class="input-section">
+            <div class="form-group">
+                <label for="urls">Enter URLs (one per line):</label>
+                <textarea id="urls" rows="5" placeholder="https://example.com&#10;https://example.org"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="logo">Upload Logo (optional):</label>
+                <input type="file" id="logo" accept="image/*">
+            </div>
+            
+            <div class="customization-section">
+                <h3>QR Code Options</h3>
+                <div class="options-grid">
+                    <div class="form-group">
+                        <label for="size">Size (px):</label>
+                        <input type="number" id="size" min="100" max="500" value="250">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="margin">Margin:</label>
+                        <input type="number" id="margin" min="0" max="50" value="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dotColor">Dot Color:</label>
+                        <input type="color" id="dotColor" value="#000000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="dotType">Dot Type:</label>
+                        <select id="dotType">
+                            <option value="rounded" selected>Rounded</option>
+                            <option value="dots">Dots</option>
+                            <option value="classy">Classy</option>
+                            <option value="classy-rounded">Classy Rounded</option>
+                            <option value="square">Square</option>
+                            <option value="extra-rounded">Extra Rounded</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="backgroundColor">Background Color:</label>
+                        <input type="color" id="backgroundColor" value="#FFFFFF">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cornerSquareType">Corner Square Type:</label>
+                        <select id="cornerSquareType">
+                            <option value="square">Square</option>
+                            <option value="extra-rounded" selected>Extra Rounded</option>
+                            <option value="dot">Dot</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cornerDotType">Corner Dot Type:</label>
+                        <select id="cornerDotType">
+                            <option value="square">Square</option>
+                            <option value="dot" selected>Dot</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="correctionLevel">Error Correction:</label>
+                        <select id="correctionLevel">
+                            <option value="L">Low (7%)</option>
+                            <option value="M" selected>Medium (15%)</option>
+                            <option value="Q">Quartile (25%)</option>
+                            <option value="H">High (30%)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="logoSize">Logo Size (%):</label>
+                        <input type="number" id="logoSize" min="5" max="40" value="20">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="logoOpacity">Logo Opacity:</label>
+                        <input type="range" id="logoOpacity" min="0.1" max="1.0" step="0.1" value="1.0">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button id="generateBtn" class="primary-btn">Generate QR Codes</button>
+                <button id="downloadAllBtn" class="secondary-btn" disabled>Download All (.zip)</button>
+            </div>
+        </div>
+        
+        <div id="results" class="results-section">
+            <h2>Generated QR Codes</h2>
+            <div id="qrCodesContainer" class="qr-codes-container"></div>
+        </div>
+    </div>
+    
+
+    <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
