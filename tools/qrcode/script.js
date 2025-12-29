@@ -276,6 +276,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         qrCode.append(qrCodeCanvas);
+        
+        // Fix SVG sizing for preview
+        setTimeout(() => {
+            const svg = qrCodeCanvas.querySelector('svg');
+            if (svg) {
+                const originalWidth = svg.getAttribute('width') || QR_SIZE;
+                const originalHeight = svg.getAttribute('height') || QR_SIZE;
+                svg.setAttribute('viewBox', `0 0 ${originalWidth} ${originalHeight}`);
+                svg.setAttribute('width', '180');
+                svg.setAttribute('height', '180');
+                svg.style.width = '180px';
+                svg.style.height = '180px';
+            }
+        }, 100);
     }
     
     // Download QR Code
@@ -299,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // Download as PDF (Vector)
+    // Download as PDF (Vector) - Poster size 500x500mm
     async function downloadAsPDF(qrCode, filename) {
         const { jsPDF } = window.jspdf;
         
@@ -307,56 +321,35 @@ document.addEventListener('DOMContentLoaded', () => {
         const svgBlob = await qrCode.getRawData('svg');
         const svgText = await svgBlob.text();
         
-        // Parse SVG to get dimensions
+        // Parse SVG
         const parser = new DOMParser();
         const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
         const svgElement = svgDoc.querySelector('svg');
         
-        const width = parseInt(svgElement.getAttribute('width')) || QR_SIZE;
-        const height = parseInt(svgElement.getAttribute('height')) || QR_SIZE;
-        
-        // Create PDF with proper dimensions (convert px to mm, 1px ≈ 0.264583mm)
-        const pxToMm = 0.264583;
-        const pdfWidth = width * pxToMm;
-        const pdfHeight = height * pxToMm;
+        // Fixed poster size: 300x300 mm (30x30 cm)
+        const pdfWidth = 300; // mm
+        const pdfHeight = 300; // mm
         
         // Add some padding
-        const padding = 10; // mm
+        const padding = 15; // mm
         const totalWidth = pdfWidth + (padding * 2);
         const totalHeight = pdfHeight + (padding * 2);
         
         const pdf = new jsPDF({
-            orientation: totalWidth > totalHeight ? 'landscape' : 'portrait',
+            orientation: 'portrait',
             unit: 'mm',
             format: [totalWidth, totalHeight]
         });
         
-        // Convert SVG to image for PDF embedding
-        const svgBase64 = btoa(unescape(encodeURIComponent(svgText)));
-        const svgDataUrl = `data:image/svg+xml;base64,${svgBase64}`;
-        
-        // Create an image from SVG
-        const img = new Image();
-        img.src = svgDataUrl;
-        
-        await new Promise((resolve) => {
-            img.onload = async () => {
-                // Create a high-res canvas for PDF
-                const scale = 4; // Higher scale for better PDF quality
-                const canvas = document.createElement('canvas');
-                canvas.width = width * scale;
-                canvas.height = height * scale;
-                
-                const ctx = canvas.getContext('2d');
-                ctx.scale(scale, scale);
-                ctx.drawImage(img, 0, 0, width, height);
-                
-                const imgData = canvas.toDataURL('image/png', 1.0);
-                pdf.addImage(imgData, 'PNG', padding, padding, pdfWidth, pdfHeight);
-                pdf.save(`${filename}.pdf`);
-                resolve();
-            };
+        // Use svg2pdf for true vector PDF
+        await pdf.svg(svgElement, {
+            x: padding,
+            y: padding,
+            width: pdfWidth,
+            height: pdfHeight
         });
+        
+        pdf.save(`${filename}.pdf`);
     }
     
     // Download All QR Codes
@@ -389,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
         saveAs(content, `qrcodes-${format}.zip`);
     }
     
-    // Generate PDF Blob for zip
+    // Generate PDF Blob for zip (Vector) - Poster size 500x500mm
     async function generatePDFBlob(qrCode, filename) {
         const { jsPDF } = window.jspdf;
         
@@ -400,44 +393,27 @@ document.addEventListener('DOMContentLoaded', () => {
         const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
         const svgElement = svgDoc.querySelector('svg');
         
-        const width = parseInt(svgElement.getAttribute('width')) || QR_SIZE;
-        const height = parseInt(svgElement.getAttribute('height')) || QR_SIZE;
-        
-        const pxToMm = 0.264583;
-        const pdfWidth = width * pxToMm;
-        const pdfHeight = height * pxToMm;
-        const padding = 10;
+        // Fixed poster size: 300x300 mm (30x30 cm)
+        const pdfWidth = 300; // mm
+        const pdfHeight = 300; // mm
+        const padding = 15; // mm
         const totalWidth = pdfWidth + (padding * 2);
         const totalHeight = pdfHeight + (padding * 2);
         
         const pdf = new jsPDF({
-            orientation: totalWidth > totalHeight ? 'landscape' : 'portrait',
+            orientation: 'portrait',
             unit: 'mm',
             format: [totalWidth, totalHeight]
         });
         
-        const svgBase64 = btoa(unescape(encodeURIComponent(svgText)));
-        const svgDataUrl = `data:image/svg+xml;base64,${svgBase64}`;
-        
-        const img = new Image();
-        img.src = svgDataUrl;
-        
-        return new Promise((resolve) => {
-            img.onload = () => {
-                const scale = 4;
-                const canvas = document.createElement('canvas');
-                canvas.width = width * scale;
-                canvas.height = height * scale;
-                
-                const ctx = canvas.getContext('2d');
-                ctx.scale(scale, scale);
-                ctx.drawImage(img, 0, 0, width, height);
-                
-                const imgData = canvas.toDataURL('image/png', 1.0);
-                pdf.addImage(imgData, 'PNG', padding, padding, pdfWidth, pdfHeight);
-                
-                resolve(pdf.output('blob'));
-            };
+        // Use svg2pdf for true vector PDF
+        await pdf.svg(svgElement, {
+            x: padding,
+            y: padding,
+            width: pdfWidth,
+            height: pdfHeight
         });
+        
+        return pdf.output('blob');
     }
 });
