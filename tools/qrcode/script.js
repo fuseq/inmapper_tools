@@ -134,13 +134,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // Sanitize filename
+    // Sanitize filename (preserves case)
     function sanitizeFilename(filename) {
         return filename
             .replace(/[^a-zA-Z0-9\-_]/g, '-')
             .replace(/-+/g, '-')
             .replace(/^-|-$/g, '')
-            .toLowerCase()
             .substring(0, 50);
     }
     
