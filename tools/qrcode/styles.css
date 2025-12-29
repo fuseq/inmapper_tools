@@ -46,12 +46,6 @@ header {
     margin-right: 120px;
 }
 
-
-
-
-
-
-
 .back-button {
     margin-right: 20px;
 }
@@ -66,7 +60,7 @@ header {
 }
 
 .back-link:hover {
-    color: #e06a3b; /* Daha koyu turuncu */
+    color: #e06a3b;
 }
 
 .back-link svg {
@@ -184,6 +178,7 @@ textarea {
     display: flex;
     gap: 15px;
     margin-top: 25px;
+    align-items: flex-start;
 }
 
 button {
@@ -210,7 +205,7 @@ button:active {
 }
 
 .primary-btn:hover {
-    background-color: #e06a3b; /* Daha koyu turuncu */
+    background-color: #e06a3b;
     box-shadow: 0 4px 8px rgba(255, 127, 80, 0.4);
 }
 
@@ -218,10 +213,17 @@ button:active {
     background-color: var(--secondary-color);
     color: white;
     box-shadow: 0 2px 5px rgba(122, 122, 122, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.secondary-btn svg {
+    transition: transform 0.3s ease;
 }
 
 .secondary-btn:hover {
-    background-color: #666666; /* Daha koyu gri */
+    background-color: #666666;
     box-shadow: 0 4px 8px rgba(122, 122, 122, 0.4);
 }
 
@@ -229,6 +231,83 @@ button:active {
     background-color: #ccc;
     cursor: not-allowed;
     transform: none;
+}
+
+.secondary-btn:disabled:hover {
+    transform: none;
+    box-shadow: 0 2px 5px rgba(122, 122, 122, 0.3);
+}
+
+/* Download All Dropdown */
+.download-all-wrapper {
+    position: relative;
+}
+
+.download-all-wrapper .secondary-btn.active svg {
+    transform: rotate(180deg);
+}
+
+.download-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    min-width: 220px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e0e0e0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s ease;
+    z-index: 100;
+    overflow: hidden;
+}
+
+.download-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 16px;
+    background: white;
+    border: none;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--dark-color);
+    transition: background 0.2s ease;
+    text-align: left;
+    border-radius: 0;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background: #f8f9fa;
+    transform: none;
+}
+
+.dropdown-item .format-badge {
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: center;
+}
+
+.dropdown-item .format-badge.vector {
+    background: #e8f5e9;
+    color: #2e7d32;
 }
 
 .results-section {
@@ -240,7 +319,7 @@ button:active {
 
 .qr-codes-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 25px;
     margin-top: 20px;
 }
@@ -257,49 +336,128 @@ button:active {
     transition: all 0.3s ease;
 }
 
-.qr-code-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    border-color: rgba(255, 127, 80, 0.4);
+
+/* QR Canvas Container - Fixed Size */
+.qr-canvas {
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Style for the canvas/SVG that contains the QR code */
-.qr-code-item canvas,
-.qr-code-item svg {
+.qr-canvas canvas,
+.qr-canvas svg {
+    width: 180px !important;
+    height: 180px !important;
     max-width: 100%;
-    height: auto !important;
-    image-rendering: -webkit-optimize-contrast; /* Improve rendering in Chrome */
-    image-rendering: crisp-edges; /* Improve rendering in Firefox */
+    max-height: 100%;
+}
+
+.qr-code-filename {
+    font-weight: 600;
+    color: var(--dark-color);
+    font-size: 15px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+    text-align: center;
 }
 
 .qr-code-url {
-    margin: 10px 0;
-    font-size: 14px;
+    margin: 0 0 12px;
+    font-size: 11px;
     word-break: break-all;
     text-align: center;
-    color: #555;
+    color: var(--secondary-color);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
 }
 
 .qr-code-actions {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .download-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
     background-color: var(--primary-color);
     color: white;
-    padding: 8px 15px;
-    font-size: 14px;
-    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 6px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 5px rgba(255, 127, 80, 0.3);
 }
 
-.download-btn:hover {
-    background-color: #e06a3b; /* Daha koyu turuncu */
-    box-shadow: 0 4px 8px rgba(255, 127, 80, 0.4);
-    transform: translateY(-2px);
+.download-btn svg {
+    width: 12px;
+    height: 12px;
+    fill: white;
+}
+
+.download-btn.svg-btn {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    box-shadow: 0 2px 5px rgba(76, 175, 80, 0.3);
+}
+
+.download-btn.svg-btn:hover {
+    background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+}
+
+.download-btn.pdf-btn {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+    box-shadow: 0 2px 5px rgba(244, 67, 54, 0.3);
+}
+
+.download-btn.pdf-btn:hover {
+    background: linear-gradient(135deg, #d32f2f 0%, #b71c1c 100%);
+}
+
+/* Input Format Hint */
+.input-format-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    background: linear-gradient(135deg, #fff5f0 0%, #fff 100%);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-color);
+    flex-wrap: wrap;
+}
+
+.format-badge {
+    background: var(--primary-color);
+    color: white;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.input-format-hint code {
+    background: #2d2d2d;
+    color: #ff7f50;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+}
+
+.format-example {
+    color: var(--secondary-color);
+    font-size: 13px;
+    font-style: italic;
 }
 
 /* Footer */
@@ -323,5 +481,15 @@ button:active {
     
     .qr-codes-container {
         grid-template-columns: 1fr;
+    }
+    
+    .input-format-hint {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .download-dropdown {
+        min-width: 100%;
     }
 }

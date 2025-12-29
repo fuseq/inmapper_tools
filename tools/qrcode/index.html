@@ -25,8 +25,15 @@
         
         <div class="input-section">
             <div class="form-group">
-                <label for="urls">Enter URLs (one per line):</label>
-                <textarea id="urls" rows="5" placeholder="https://example.com&#10;https://example.org"></textarea>
+                <label for="urls">Enter URLs with filenames (one per line):</label>
+                <div class="input-format-hint">
+                    <span class="format-badge">Format:</span> 
+                    <code>URL | filename</code> 
+                    <span class="format-example">Example: https://example.com | my-qrcode</span>
+                </div>
+                <textarea id="urls" rows="6" placeholder="https://example.com | example-qr
+https://google.com | google-qr
+https://inmapper.com | inmapper-main"></textarea>
             </div>
             
             <div class="form-group">
@@ -37,11 +44,6 @@
             <div class="customization-section">
                 <h3>QR Code Options</h3>
                 <div class="options-grid">
-                    <div class="form-group">
-                        <label for="size">Size (px):</label>
-                        <input type="number" id="size" min="100" max="500" value="250">
-                    </div>
-                    
                     <div class="form-group">
                         <label for="margin">Margin:</label>
                         <input type="number" id="margin" min="0" max="50" value="10">
@@ -110,7 +112,22 @@
             
             <div class="button-group">
                 <button id="generateBtn" class="primary-btn">Generate QR Codes</button>
-                <button id="downloadAllBtn" class="secondary-btn" disabled>Download All (.zip)</button>
+                <div class="download-all-wrapper">
+                    <button id="downloadAllBtn" class="secondary-btn" disabled>
+                        Download All
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16">
+                            <path d="M7,10L12,15L17,10H7Z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                    <div class="download-dropdown" id="downloadDropdown">
+                        <button class="dropdown-item" data-format="svg">
+                            <span class="format-badge vector">SVG</span> Vector - Scalable
+                        </button>
+                        <button class="dropdown-item" data-format="pdf">
+                            <span class="format-badge vector">PDF</span> Vector - Print Ready
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -124,6 +141,7 @@
     <script src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
     <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
     <script src="https://unpkg.com/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

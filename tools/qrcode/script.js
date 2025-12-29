@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
-
+    // DOM Elements
     const urlsTextarea = document.getElementById('urls');
     const logoInput = document.getElementById('logo');
     const generateBtn = document.getElementById('generateBtn');
     const downloadAllBtn = document.getElementById('downloadAllBtn');
+    const downloadDropdown = document.getElementById('downloadDropdown');
     const qrCodesContainer = document.getElementById('qrCodesContainer');
     const resultsSection = document.getElementById('results');
     
-   
-    const sizeInput = document.getElementById('size');
+    // Options Elements
     const marginInput = document.getElementById('margin');
     const dotColorInput = document.getElementById('dotColor');
     const dotTypeSelect = document.getElementById('dotType');
@@ -19,20 +19,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoSizeInput = document.getElementById('logoSize');
     const logoOpacityInput = document.getElementById('logoOpacity');
     
-   
+    // Constants
+    const QR_SIZE = 500; // Fixed size for vector quality
+    
+    // State
     let logoDataUrl = null;
     const generatedQRCodes = [];
 
+    // Event Listeners
     logoInput.addEventListener('change', handleLogoUpload);
     generateBtn.addEventListener('click', generateQRCodes);
-    downloadAllBtn.addEventListener('click', downloadAllQRCodes);
     
+    // Download All Dropdown Toggle
+    downloadAllBtn.addEventListener('click', (e) => {
+        if (downloadAllBtn.disabled) return;
+        e.stopPropagation();
+        downloadAllBtn.classList.toggle('active');
+        downloadDropdown.classList.toggle('show');
+    });
     
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!downloadAllBtn.contains(e.target) && !downloadDropdown.contains(e.target)) {
+            downloadAllBtn.classList.remove('active');
+            downloadDropdown.classList.remove('show');
+        }
+    });
+    
+    // Dropdown items
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const format = item.getAttribute('data-format');
+            downloadAllQRCodes(format);
+            downloadAllBtn.classList.remove('active');
+            downloadDropdown.classList.remove('show');
+        });
+    });
+    
+    // Handle Logo Upload
     function handleLogoUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
         
-      
         if (!file.type.match('image.*')) {
             alert('Please select an image file');
             return;
@@ -41,18 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const reader = new FileReader();
         
         reader.onload = (e) => {
-         
             const img = new Image();
             img.onload = function() {
-            
                 const canvas = document.createElement('canvas');
-                
-               
-                const maxDimension = 300; 
+                const maxDimension = 300;
                 let width = img.width;
                 let height = img.height;
                 
-           
                 if (width > maxDimension || height > maxDimension) {
                     if (width > height) {
                         height = (height / width) * maxDimension;
@@ -66,12 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 canvas.width = width;
                 canvas.height = height;
                 
-               
                 const ctx = canvas.getContext('2d');
                 ctx.imageSmoothingEnabled = true;
                 ctx.imageSmoothingQuality = 'high';
                 ctx.drawImage(img, 0, 0, width, height);
-                
                 
                 logoDataUrl = canvas.toDataURL('image/png');
             };
@@ -82,53 +103,59 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsDataURL(file);
     }
     
-    // Generate QR Codes
-    function generateQRCodes() {
-        const urls = urlsTextarea.value.trim().split('\n').filter(url => url.trim() !== '');
+    // Parse URL and filename from input
+    function parseUrlInput(line) {
+        const trimmed = line.trim();
+        if (!trimmed) return null;
         
-        if (urls.length === 0) {
-            alert('Please enter at least one URL');
-            return;
+        // Check for separator (pipe character)
+        if (trimmed.includes('|')) {
+            const parts = trimmed.split('|');
+            const url = parts[0].trim();
+            const filename = parts[1].trim() || generateFilename(url);
+            return { url, filename: sanitizeFilename(filename) };
         }
         
-
-        qrCodesContainer.innerHTML = '';
-        generatedQRCodes.length = 0;
-        
-
-        const options = getQRCodeOptions();
-        
-
-        urls.forEach((url, index) => {
-            generateQRCode(url, index, options);
-        });
-        
-
-        resultsSection.style.display = 'block';
-        
-
-        downloadAllBtn.disabled = urls.length <= 1;
+        // No separator - generate filename from URL
+        return { url: trimmed, filename: generateFilename(trimmed) };
     }
     
-
+    // Generate filename from URL
+    function generateFilename(url) {
+        try {
+            const urlObj = new URL(url);
+            let name = urlObj.hostname.replace(/^www\./, '').replace(/\./g, '-');
+            if (urlObj.pathname && urlObj.pathname !== '/') {
+                name += urlObj.pathname.replace(/\//g, '-').replace(/-$/, '');
+            }
+            return sanitizeFilename(name);
+        } catch {
+            return `qrcode-${Date.now()}`;
+        }
+    }
+    
+    // Sanitize filename
+    function sanitizeFilename(filename) {
+        return filename
+            .replace(/[^a-zA-Z0-9\-_]/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '')
+            .toLowerCase()
+            .substring(0, 50);
+    }
+    
+    // Get QR Code Options
     function getQRCodeOptions() {
-
         const selectedCorrection = logoDataUrl ? 'H' : correctionLevelSelect.value;
         
         return {
-            width: parseInt(sizeInput.value),
-            height: parseInt(sizeInput.value),
+            width: QR_SIZE,
+            height: QR_SIZE,
             margin: parseInt(marginInput.value),
+            type: 'svg', // Always generate as SVG for vector quality
             dotsOptions: {
                 color: dotColorInput.value,
                 type: dotTypeSelect.value,
-                gradient: {
-                    type: 'linear',
-                    rotation: 0,
-                    colorStops: [
-                        { offset: 0, color: dotColorInput.value }
-                    ]
-                }
             },
             backgroundOptions: {
                 color: backgroundColorInput.value,
@@ -141,119 +168,276 @@ document.addEventListener('DOMContentLoaded', () => {
                 type: cornerDotTypeSelect.value,
                 color: dotColorInput.value
             },
-            correctionLevel: selectedCorrection,
+            qrOptions: {
+                typeNumber: 0,
+                mode: 'Byte',
+                errorCorrectionLevel: selectedCorrection
+            },
             imageOptions: {
                 crossOrigin: 'anonymous',
                 margin: 5,
                 imageSize: parseFloat(logoSizeInput.value) / 100,
                 hideBackgroundDots: true,
                 imagePosition: 'center',
-                opacity: parseFloat(logoOpacityInput.value)
             }
         };
     }
     
+    // Generate QR Codes
+    function generateQRCodes() {
+        const lines = urlsTextarea.value.trim().split('\n');
+        const entries = lines.map(parseUrlInput).filter(Boolean);
+        
+        if (entries.length === 0) {
+            alert('Please enter at least one URL');
+            return;
+        }
+        
+        // Clear previous
+        qrCodesContainer.innerHTML = '';
+        generatedQRCodes.length = 0;
+        
+        const options = getQRCodeOptions();
+        
+        entries.forEach((entry, index) => {
+            generateQRCode(entry.url, entry.filename, index, options);
+        });
+        
+        resultsSection.style.display = 'block';
+        downloadAllBtn.disabled = entries.length <= 1;
+    }
     
-    function generateQRCode(url, index, options) {
-      
+    // Generate Single QR Code
+    function generateQRCode(url, filename, index, options) {
         const qrCodeItem = document.createElement('div');
         qrCodeItem.className = 'qr-code-item';
         
-       
         const qrCodeCanvas = document.createElement('div');
         qrCodeCanvas.id = `qr-canvas-${index}`;
+        qrCodeCanvas.className = 'qr-canvas';
         
+        const filenameText = document.createElement('div');
+        filenameText.className = 'qr-code-filename';
+        filenameText.textContent = filename;
         
         const urlText = document.createElement('div');
         urlText.className = 'qr-code-url';
         urlText.textContent = url;
-        
-      
-        const downloadBtn = document.createElement('button');
-        downloadBtn.className = 'download-btn';
-        downloadBtn.textContent = 'Download';
-        downloadBtn.onclick = () => downloadQRCode(index);
-        
+        urlText.title = url;
         
         const actionsDiv = document.createElement('div');
         actionsDiv.className = 'qr-code-actions';
-        actionsDiv.appendChild(downloadBtn);
         
-       
+        // SVG Download Button
+        const svgBtn = document.createElement('button');
+        svgBtn.className = 'download-btn svg-btn';
+        svgBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
+            </svg>
+            SVG
+        `;
+        svgBtn.onclick = () => downloadQRCode(index, 'svg');
+        
+        // PDF Download Button
+        const pdfBtn = document.createElement('button');
+        pdfBtn.className = 'download-btn pdf-btn';
+        pdfBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
+            </svg>
+            PDF
+        `;
+        pdfBtn.onclick = () => downloadQRCode(index, 'pdf');
+        
+        actionsDiv.appendChild(svgBtn);
+        actionsDiv.appendChild(pdfBtn);
+        
         qrCodeItem.appendChild(qrCodeCanvas);
+        qrCodeItem.appendChild(filenameText);
         qrCodeItem.appendChild(urlText);
         qrCodeItem.appendChild(actionsDiv);
         
-        
         qrCodesContainer.appendChild(qrCodeItem);
         
-       
+        // Create QR Code with SVG type
         const finalOptions = {
             ...options,
-            width: options.width * 2, 
-            height: options.height * 2,
             data: url,
             image: logoDataUrl,
-            qrOptions: {
-                typeNumber: 0,
-                mode: 'Byte',
-                errorCorrectionLevel: options.correctionLevel
-            }
         };
         
         const qrCode = new QRCodeStyling(finalOptions);
         
-        
         generatedQRCodes.push({
             qrCode,
             url,
-            filename: `qrcode-${index + 1}.png`
+            filename
         });
         
-       
         qrCode.append(qrCodeCanvas);
     }
     
+    // Download QR Code
+    async function downloadQRCode(index, format) {
+        const { qrCode, filename } = generatedQRCodes[index];
+        
+        switch (format) {
+            case 'svg':
+                downloadAsSVG(qrCode, filename);
+                break;
+            case 'pdf':
+                await downloadAsPDF(qrCode, filename);
+                break;
+        }
+    }
     
-    function downloadQRCode(index) {
-        const { qrCode, url, filename } = generatedQRCodes[index];
-        
-        
-        qrCode.download({
-            name: filename,
-            extension: 'png',
-            quality: 1.0 
+    // Download as SVG (Vector)
+    function downloadAsSVG(qrCode, filename) {
+        qrCode.getRawData('svg').then(blob => {
+            saveAs(blob, `${filename}.svg`);
         });
     }
     
- 
-    async function downloadAllQRCodes() {
-        if (generatedQRCodes.length === 0) return;
+    // Download as PDF (Vector)
+    async function downloadAsPDF(qrCode, filename) {
+        const { jsPDF } = window.jspdf;
         
+        // Get SVG data
+        const svgBlob = await qrCode.getRawData('svg');
+        const svgText = await svgBlob.text();
+        
+        // Parse SVG to get dimensions
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+        const svgElement = svgDoc.querySelector('svg');
+        
+        const width = parseInt(svgElement.getAttribute('width')) || QR_SIZE;
+        const height = parseInt(svgElement.getAttribute('height')) || QR_SIZE;
+        
+        // Create PDF with proper dimensions (convert px to mm, 1px ≈ 0.264583mm)
+        const pxToMm = 0.264583;
+        const pdfWidth = width * pxToMm;
+        const pdfHeight = height * pxToMm;
+        
+        // Add some padding
+        const padding = 10; // mm
+        const totalWidth = pdfWidth + (padding * 2);
+        const totalHeight = pdfHeight + (padding * 2);
+        
+        const pdf = new jsPDF({
+            orientation: totalWidth > totalHeight ? 'landscape' : 'portrait',
+            unit: 'mm',
+            format: [totalWidth, totalHeight]
+        });
+        
+        // Convert SVG to image for PDF embedding
+        const svgBase64 = btoa(unescape(encodeURIComponent(svgText)));
+        const svgDataUrl = `data:image/svg+xml;base64,${svgBase64}`;
+        
+        // Create an image from SVG
+        const img = new Image();
+        img.src = svgDataUrl;
+        
+        await new Promise((resolve) => {
+            img.onload = async () => {
+                // Create a high-res canvas for PDF
+                const scale = 4; // Higher scale for better PDF quality
+                const canvas = document.createElement('canvas');
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.scale(scale, scale);
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                const imgData = canvas.toDataURL('image/png', 1.0);
+                pdf.addImage(imgData, 'PNG', padding, padding, pdfWidth, pdfHeight);
+                pdf.save(`${filename}.pdf`);
+                resolve();
+            };
+        });
+    }
+    
+    // Download All QR Codes
+    async function downloadAllQRCodes(format) {
+        if (generatedQRCodes.length === 0) return;
         
         const zip = new JSZip();
         
-       
-        let processed = 0;
+        // Create folder for organization
+        const folderName = format.toUpperCase();
+        const folder = zip.folder(folderName);
         
-     
-        const promises = generatedQRCodes.map(({ qrCode, url, filename }, index) => {
-            return new Promise(resolve => {
-                qrCode.getRawData('png').then(blob => {
-                    zip.file(filename, blob);
-                    processed++;
-                    resolve();
-                });
-            });
+        const promises = generatedQRCodes.map(async ({ qrCode, filename }) => {
+            switch (format) {
+                case 'svg':
+                    const svgBlob = await qrCode.getRawData('svg');
+                    folder.file(`${filename}.svg`, svgBlob);
+                    break;
+                    
+                case 'pdf':
+                    const pdfBlob = await generatePDFBlob(qrCode, filename);
+                    folder.file(`${filename}.pdf`, pdfBlob);
+                    break;
+            }
         });
         
-      
         await Promise.all(promises);
         
-       
-        zip.generateAsync({ type: 'blob' }).then(content => {
+        const content = await zip.generateAsync({ type: 'blob' });
+        saveAs(content, `qrcodes-${format}.zip`);
+    }
+    
+    // Generate PDF Blob for zip
+    async function generatePDFBlob(qrCode, filename) {
+        const { jsPDF } = window.jspdf;
         
-            saveAs(content, 'qrcodes.zip');
+        const svgBlob = await qrCode.getRawData('svg');
+        const svgText = await svgBlob.text();
+        
+        const parser = new DOMParser();
+        const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+        const svgElement = svgDoc.querySelector('svg');
+        
+        const width = parseInt(svgElement.getAttribute('width')) || QR_SIZE;
+        const height = parseInt(svgElement.getAttribute('height')) || QR_SIZE;
+        
+        const pxToMm = 0.264583;
+        const pdfWidth = width * pxToMm;
+        const pdfHeight = height * pxToMm;
+        const padding = 10;
+        const totalWidth = pdfWidth + (padding * 2);
+        const totalHeight = pdfHeight + (padding * 2);
+        
+        const pdf = new jsPDF({
+            orientation: totalWidth > totalHeight ? 'landscape' : 'portrait',
+            unit: 'mm',
+            format: [totalWidth, totalHeight]
+        });
+        
+        const svgBase64 = btoa(unescape(encodeURIComponent(svgText)));
+        const svgDataUrl = `data:image/svg+xml;base64,${svgBase64}`;
+        
+        const img = new Image();
+        img.src = svgDataUrl;
+        
+        return new Promise((resolve) => {
+            img.onload = () => {
+                const scale = 4;
+                const canvas = document.createElement('canvas');
+                canvas.width = width * scale;
+                canvas.height = height * scale;
+                
+                const ctx = canvas.getContext('2d');
+                ctx.scale(scale, scale);
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                const imgData = canvas.toDataURL('image/png', 1.0);
+                pdf.addImage(imgData, 'PNG', padding, padding, pdfWidth, pdfHeight);
+                
+                resolve(pdf.output('blob'));
+            };
         });
     }
-}); 
+});
