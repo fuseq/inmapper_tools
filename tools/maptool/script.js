@@ -864,23 +864,14 @@ addMarkersBtn.addEventListener('click', () => {
     cornerMarkers.push(marker);
   });
 
-  // Create coordinates display - Active image bilgisini kaldırdık
+  // Create coordinates display - Kompakt tasarım
   const coordinatesDiv = document.getElementById('coordinatesDiv');
-  coordinatesDiv.innerHTML = `
-<div style="position: relative;">
-  <button class="close-coords-btn"><i class="fas fa-times"></i></button>
-  <strong>Coordinates:</strong>
-  <div style="font-size: 12px; color: #555; line-height: 1.2;">
-    <div>Top Left: (${corners[0].lat.toFixed(6)}, ${corners[0].lng.toFixed(6)})</div>
-    <div>Top Right: (${corners[1].lat.toFixed(6)}, ${corners[1].lng.toFixed(6)})</div>
-    <div>Bottom Right: (${corners[2].lat.toFixed(6)}, ${corners[2].lng.toFixed(6)})</div>
-    <div>Bottom Left: (${corners[3].lat.toFixed(6)}, ${corners[3].lng.toFixed(6)})</div>
-  </div>
-  <button id="copy-coords" style="margin-top: 5px; font-size: 12px; padding: 4px 8px;">
-    <i class="fas fa-copy"></i> Copy
-  </button>
-</div>
-  `;
+  coordinatesDiv.innerHTML = `<button class="close-coords-btn"><i class="fas fa-times"></i></button>
+<div class="coord-row"><span class="coord-label">TL</span><span class="coord-value">${corners[0].lat.toFixed(4)}, ${corners[0].lng.toFixed(4)}</span><button class="copy-corner-btn-small" data-corner="0"><i class="fas fa-copy"></i></button></div>
+<div class="coord-row highlight"><span class="coord-label">TR</span><span class="coord-value">${corners[1].lat.toFixed(4)}, ${corners[1].lng.toFixed(4)}</span><button class="copy-corner-btn-small" data-corner="1"><i class="fas fa-copy"></i></button></div>
+<div class="coord-row"><span class="coord-label">BR</span><span class="coord-value">${corners[2].lat.toFixed(4)}, ${corners[2].lng.toFixed(4)}</span><button class="copy-corner-btn-small" data-corner="2"><i class="fas fa-copy"></i></button></div>
+<div class="coord-row highlight"><span class="coord-label">BL</span><span class="coord-value">${corners[3].lat.toFixed(4)}, ${corners[3].lng.toFixed(4)}</span><button class="copy-corner-btn-small" data-corner="3"><i class="fas fa-copy"></i></button></div>
+<button id="copy-coords"><i class="fas fa-copy"></i> Copy All</button>`;
 
   // Show coordinates with animation
   coordinatesDiv.style.display = 'block';
@@ -889,14 +880,28 @@ addMarkersBtn.addEventListener('click', () => {
     coordinatesDiv.style.opacity = '1';
   }, 10);
 
-  // Copy coordinates functionality
+  // Copy all coordinates functionality
   document.getElementById('copy-coords').addEventListener('click', () => {
     const coordText = corners.map((corner, i) =>
-      `${['TL', 'TR', 'BR', 'BL'][i]}: ${corner.lat.toFixed(6)}, ${corner.lng.toFixed(6)}`
+      `${['TL', 'TR', 'BR', 'BL'][i]}: ${corner.lat.toFixed(4)}, ${corner.lng.toFixed(4)}`
     ).join('\n');
 
     navigator.clipboard.writeText(coordText).then(() => {
-      showNotification('Coordinates copied to clipboard', 'info');
+      showNotification('All coordinates copied', 'info');
+    });
+  });
+
+  // Individual corner copy buttons
+  document.querySelectorAll('.copy-corner-btn-small').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const cornerIndex = parseInt(btn.getAttribute('data-corner'));
+      const cornerNames = ['TL', 'TR', 'BR', 'BL'];
+      const coordText = `${corners[cornerIndex].lat.toFixed(4)}, ${corners[cornerIndex].lng.toFixed(4)}`;
+      
+      navigator.clipboard.writeText(coordText).then(() => {
+        showNotification(`${cornerNames[cornerIndex]} copied`, 'info');
+      });
     });
   });// Close button for coordinates popup
   document.querySelector('.close-coords-btn').addEventListener('click', () => {
