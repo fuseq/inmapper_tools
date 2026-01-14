@@ -8,10 +8,11 @@
     <!-- Inmapper Auth SDK -->
     <script src="https://inmapper-otp.netlify.app/sdk/inmapper-auth.js"></script>
     <script>
-        const auth = new InmapperAuth();
+        const auth = new InmapperAuth({
+            resourceId: 'inmapper-tools'
+        });
         auth.protect().then(user => {
             if (user) {
-                // Kullanıcı doğrulandı, sayfa yüklenebilir
                 console.log('Authenticated:', user.name);
             }
         });

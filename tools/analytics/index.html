@@ -8,7 +8,7 @@
   
   <!-- Inmapper Auth SDK -->
   <script src="https://inmapper-otp.netlify.app/sdk/inmapper-auth.js"></script>
-  <script>const auth = new InmapperAuth(); auth.protect();</script>
+  <script>const auth = new InmapperAuth({ resourceId: 'inmapper-tools' }); auth.protect();</script>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
   <!-- CoreUI CSS -->

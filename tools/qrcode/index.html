@@ -7,7 +7,7 @@
     
     <!-- Inmapper Auth SDK -->
     <script src="https://inmapper-otp.netlify.app/sdk/inmapper-auth.js"></script>
-    <script>const auth = new InmapperAuth(); auth.protect();</script>
+    <script>const auth = new InmapperAuth({ resourceId: 'inmapper-tools' }); auth.protect();</script>
     
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="../../images/logo.png" type="image/png">
