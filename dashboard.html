@@ -13,7 +13,6 @@
       });
       auth.protect().then(user => {
         if (user) {
-          // Token'ı dış site linklerine ekle
           const token = auth.getToken();
           document.querySelectorAll('a[href*="isohtel.com.tr"]').forEach(link => {
             const url = new URL(link.href);
@@ -25,22 +24,33 @@
     </script>
     
     <link rel="stylesheet" href="dashboard.css">
-    <link rel="icon" href="images/logo.png" type="image/png">
+    <link rel="icon" href="images/inmapper.png" type="image/png">
 </head>
 <body>
     <!-- Top Navbar -->
     <nav class="top-navbar">
         <div class="navbar-container">
             <div class="navbar-left">
-                                <div class="brand">
-                    <img src="images/logo.png" alt="inMapper" class="brand-logo">
+                <div class="brand">
+                    <img src="images/inmapper.png" alt="inMapper" class="brand-logo">
+                    <div class="brand-text"><span class="brand-in">in</span><span class="brand-mapper">Mapper</span></div>
                 </div>
-                <div class="navbar-links">
-                    <a href="#" class="nav-link">QR CODE TOOLS</a>
-                    <a href="#" class="nav-link">MAP TOOLS</a>
-                    <a href="#" class="nav-link">ANALYTICS</a>
-                    <a href="#" class="nav-link">MORE TOOLS</a>
+            </div>
+            <div class="navbar-center">
+                <div class="search-box">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zM9.5 14C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="Search tools...">
                 </div>
+            </div>
+            <div class="navbar-right">
+                <div class="lang-toggle" id="langToggle">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="tr">TR</button>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                    <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+                    <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+                </button>
             </div>
         </div>
     </nav>
@@ -49,18 +59,19 @@
                 <header>
             <div class="header-content">
                 <div class="header-text">
-                    <h1>inMapper Tools</h1>
+                    <h1 data-i18n="title">Tools</h1>
+                    <p class="subtitle" data-i18n="subtitle">Internal tools and utilities for the inMapper platform</p>
                 </div>
             </div>
             
             <!-- Filter Tags -->
             <div class="filter-tags">
-                <button class="tag-btn active" data-filter="all">All</button>
-                <button class="tag-btn" data-filter="optimize">Analytics</button>
-                <button class="tag-btn" data-filter="management">Management</button>
-                <button class="tag-btn" data-filter="create">Editor/Generator</button>
-                <button class="tag-btn" data-filter="edit">SVG/Map Positioning</button>
-                <button class="tag-btn" data-filter="convert">AI/ML</button>
+                <button class="tag-btn active" data-filter="all" data-i18n="filterAll">All</button>
+                <button class="tag-btn" data-filter="optimize" data-i18n="filterAnalytics">Analytics</button>
+                <button class="tag-btn" data-filter="management" data-i18n="filterManagement">Management</button>
+                <button class="tag-btn" data-filter="create" data-i18n="filterEditor">Editor/Generator</button>
+                <button class="tag-btn" data-filter="edit" data-i18n="filterSvg">SVG/Map Positioning</button>
+                <button class="tag-btn" data-filter="convert" data-i18n="filterAi">AI/ML</button>
             </div>
         </header>
         
@@ -72,8 +83,9 @@
                         <path d="M3 3h6v6H3V3zm2 2v2h2V5H5zm8-2h6v6h-6V3zm2 2v2h2V5h-2zM3 11h6v6H3v-6zm2 2v2h2v-2H5zm13-2h3v2h-3v-2zm-5 4h2v2h-2v-2zm2 0h3v2h-3v-2zm3 0h2v2h-2v-2zm0-4h2v2h-2v-2zm0 8h2v2h-2v-2z"/>
                     </svg>
                 </div>
-                <h3>QR Code Generator</h3>
-                <p>Creating and customizing QR codes from URLs</p>
+                <h3 data-i18n="qrcode_title">QR Code Generator</h3>
+                <p data-i18n="qrcode_desc">Creating and customizing QR codes from URLs</p>
+                <span class="card-badge" data-i18n="badgeEditor">Editor / Generator</span>
                 <a href="tools/qrcode/index.html" class="btn">Open Tool</a>
             </div>
             
@@ -84,8 +96,9 @@
                         <path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/>
                     </svg>
                 </div>
-                <h3>Map Position Tool</h3>
-                <p>Tool for placing visuals and setting coordinates on the map</p>
+                <h3 data-i18n="maptool_title">Map Position Tool</h3>
+                <p data-i18n="maptool_desc">Tool for placing visuals and setting coordinates on the map</p>
+                <span class="card-badge" data-i18n="badgeSvg">SVG / Map Positioning</span>
                 <a href="tools/maptool/index.html" class="btn">Open Tool</a>
             </div>
             
@@ -96,8 +109,9 @@
                         <path d="M9 17H7V10H9V17ZM13 17H11V7H13V17ZM17 17H15V13H17V17ZM19 19H5V5H19V19.1M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3Z"/>
                     </svg>
                 </div>
-                <h3>Analytics Dashboard</h3>
-                <p>Tool for viewing detailed usage and route statistics</p>
+                <h3 data-i18n="analytics_title">Analytics Dashboard</h3>
+                <p data-i18n="analytics_desc">Tool for viewing detailed usage and route statistics</p>
+                <span class="card-badge" data-i18n="badgeAnalytics">Analytics</span>
                 <a href="https://matomo-analytics-frontend.isohtel.com.tr/" class="btn" target="_blank">Open Tool</a>
             </div>
 
@@ -108,8 +122,9 @@
                         <path d="M21,16H3V4H21M21,2H3C1.89,2 1,2.89 1,4V16A2,2 0 0,0 3,18H10V20H8V22H16V20H14V18H21A2,2 0 0,0 23,16V4C23,2.89 22.1,2 21,2Z"/>
                     </svg>
                 </div>
-                <h3>Kiosk Manager</h3>
-                <p>Kiosk device and landing page management panel</p>
+                <h3 data-i18n="kiosk_title">Kiosk Manager</h3>
+                <p data-i18n="kiosk_desc">Kiosk device and landing page management panel</p>
+                <span class="card-badge" data-i18n="badgeManagement">Management</span>
                 <a href="https://inmapper-kiosk-backend.isohtel.com.tr/" class="btn" target="_blank">Open Tool</a>
             </div>
 
@@ -120,8 +135,9 @@
                         <path d="M5,3H7V5H5V10A2,2 0 0,1 3,12A2,2 0 0,1 5,14V19H7V21H5C3.93,20.73 3,20.1 3,19V15A2,2 0 0,0 1,13H0V11H1A2,2 0 0,0 3,9V5A2,2 0 0,1 5,3M19,3A2,2 0 0,1 21,5V9A2,2 0 0,0 23,11H24V13H23A2,2 0 0,0 21,15V19A2,2 0 0,1 19,21H17V19H19V14A2,2 0 0,1 21,12A2,2 0 0,1 19,10V5H17V3H19M12,15A1,1 0 0,1 13,16A1,1 0 0,1 12,17A1,1 0 0,1 11,16A1,1 0 0,1 12,15M8,12A1,1 0 0,1 9,13A1,1 0 0,1 8,14A1,1 0 0,1 7,13A1,1 0 0,1 8,12M16,12A1,1 0 0,1 17,13A1,1 0 0,1 16,14A1,1 0 0,1 15,13A1,1 0 0,1 16,12M12,7A1,1 0 0,1 13,8A1,1 0 0,1 12,9A1,1 0 0,1 11,8A1,1 0 0,1 12,7Z"/>
                     </svg>
                 </div>
-                <h3>SVG Validator</h3>
-                <p>Routing map SVG validation and analysis tool</p>
+                <h3 data-i18n="svgvalidator_title">SVG Validator</h3>
+                <p data-i18n="svgvalidator_desc">Routing map SVG validation and analysis tool</p>
+                <span class="card-badge" data-i18n="badgeSvg">SVG / Map Positioning</span>
                 <a href="http://inmapper-svg-validator.isohtel.com.tr/" class="btn" target="_blank">Open Tool</a>
             </div>
 
@@ -132,41 +148,41 @@
                         <path d="M3,5H9V11H3V5M5,7V9H7V7H5M11,7H21V9H11V7M11,15H21V17H11V15M5,20L1.5,16.5L2.91,15.09L5,17.17L9.59,12.59L11,14L5,20Z"/>
                     </svg>
                 </div>
-                <h3>ID Assigner</h3>
-                <p>SVG element ID assignment and management tool</p>
+                <h3 data-i18n="idassigner_title">ID Assigner</h3>
+                <p data-i18n="idassigner_desc">SVG element ID assignment and management tool</p>
+                <span class="card-badge" data-i18n="badgeSvg">SVG / Map Positioning</span>
                 <a href="https://inmapper-id-assigner.isohtel.com.tr/" class="btn" target="_blank">Open Tool</a>
             </div>
 
-            <!-- Tool 7 -->
-            <div class="tool-card" data-tool="tool7" data-category="">
+            <!-- Coming Soon -->
+            <div class="tool-card coming-soon" data-tool="tool7" data-category="">
+                <span class="coming-soon-badge" data-i18n="comingSoon">Coming Soon</span>
                 <div class="tool-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
                         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20M10,19L12,15H9V10H15V15L13,19H10Z"/>
                     </svg>
                 </div>
-                <h3>Tool 7</h3>
-                <p>Tool 7 details</p>
-                <a href="#" class="btn">Open Tool</a>
+                <h3 data-i18n="comingSoonTitle">More Tools</h3>
+                <p data-i18n="comingSoonDesc">New tools are being developed</p>
             </div>
 
-            <!-- Tool 8 -->
-            <div class="tool-card" data-tool="tool8" data-category="">
+            <!-- Coming Soon -->
+            <div class="tool-card coming-soon" data-tool="tool8" data-category="">
+                <span class="coming-soon-badge" data-i18n="comingSoon">Coming Soon</span>
                 <div class="tool-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="48" height="48">
                         <path d="M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5M17.13,17C15.92,18.85 14.11,20.24 12,20.92C9.89,20.24 8.08,18.85 6.87,17C6.53,16.5 6.24,16 6,15.47C6,13.82 8.71,12.47 12,12.47C15.29,12.47 18,13.79 18,15.47C17.76,16 17.47,16.5 17.13,17Z"/>
                     </svg>
                 </div>
-                <h3>Tool 8</h3>
-                <p>Tool 8 details</p>
-                <a href="#" class="btn">Open Tool</a>
+                <h3 data-i18n="comingSoonTitle">More Tools</h3>
+                <p data-i18n="comingSoonDesc">New tools are being developed</p>
             </div>
             
             
         </main>
         
         <footer class="footer">
-            <p>&copy; 2025 <strong>inMapper</strong> - Mapping and Location Technologies</p>
-            
+            <p>&copy; 2026 <strong>inMapper</strong></p>
         </footer>
     </div>
 
