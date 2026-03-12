@@ -66,7 +66,7 @@ const translations = {
 function getPreferredTheme() {
     const stored = localStorage.getItem('inmapper-theme');
     if (stored) return stored;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return 'light';
 }
 
 function applyTheme(theme) {
@@ -79,8 +79,7 @@ function applyTheme(theme) {
 function getPreferredLang() {
     const stored = localStorage.getItem('inmapper-lang');
     if (stored) return stored;
-    const browserLang = navigator.language || navigator.userLanguage || 'en';
-    return browserLang.startsWith('tr') ? 'tr' : 'en';
+    return 'en';
 }
 
 function applyLanguage(lang) {
@@ -204,10 +203,4 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // System theme change listener
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('inmapper-theme')) {
-            applyTheme(e.matches ? 'dark' : 'light');
-        }
-    });
 });
