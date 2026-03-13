@@ -107,6 +107,11 @@
 }
 [data-theme="dark"] .tool-card[data-tool="id-assigner"] .tool-icon svg { fill: #FED7AA; }
 
+[data-theme="dark"] .tool-card[data-tool="geojson-converter"] .tool-icon {
+    background: linear-gradient(135deg, #0F766E, #14B8A6);
+}
+[data-theme="dark"] .tool-card[data-tool="geojson-converter"] .tool-icon svg { fill: #99F6E4; }
+
 [data-theme="dark"] .tool-card.coming-soon .tool-icon {
     background: linear-gradient(135deg, #1E293B, #334155);
 }
@@ -554,6 +559,11 @@ header {
 }
 .tool-card[data-tool="id-assigner"] .tool-icon svg { fill: #9A3412; }
 
+.tool-card[data-tool="geojson-converter"] .tool-icon {
+    background: linear-gradient(135deg, #CCFBF1, #99F6E4);
+}
+.tool-card[data-tool="geojson-converter"] .tool-icon svg { fill: #0F766E; }
+
 /* ── Card Text ── */
 
 .tool-card h3 {
@@ -661,6 +671,7 @@ header {
 .tool-card:nth-child(6) { animation-delay: 0.24s; }
 .tool-card:nth-child(7) { animation-delay: 0.28s; }
 .tool-card:nth-child(8) { animation-delay: 0.32s; }
+.tool-card:nth-child(9) { animation-delay: 0.36s; }
 
 .tool-card.coming-soon {
     animation: cardFadeIn 0.5s var(--ease) both;
